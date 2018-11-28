@@ -1,6 +1,7 @@
 #ifndef REST_SVR_H
 #define REST_SVR_H
 
+#include <cstdint>
 #include <memory>
 #include <list>
 
@@ -11,7 +12,7 @@
 class RESTsvr
 {
   public:
-    RESTsvr();
+    RESTsvr(const int port_, const int workers_);
 
     RESTsvr(const RESTsvr&) = delete;
     RESTsvr& operator=(const RESTsvr&) = delete;

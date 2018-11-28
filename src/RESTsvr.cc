@@ -8,9 +8,10 @@
 #include <functional>
 
 
-RESTsvr::RESTsvr()
+RESTsvr::RESTsvr(const int port_, const int workers_)
     : _log(log4cpp::Category::getInstance("RESTsvr"))
 {
+    LOG_DEBUG(_log) << "port=" << port_ << " workers=" << workers_;
 
     const std::string  GET = "GET";
     const std::string  PUT = "PUT";
@@ -22,8 +23,8 @@ RESTsvr::RESTsvr()
     _svc.publish(resource);
     
     _settings = std::make_shared<restbed::Settings>();
-    _settings->set_port(1984);
-    _settings->set_worker_limit(10);
+    _settings->set_port(port_);
+    _settings->set_worker_limit(workers_);
     _settings->set_default_header("Connection", "close");
     _settings->set_default_header("Server", "whatdoineed2do/oflkr" );
     _settings->set_default_header("Pragma", "no-cache" );
