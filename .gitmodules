@@ -4,3 +4,6 @@
 [submodule "deps/restbed"]
 	path = deps/restbed
 	url = https://github.com/Corvusoft/restbed
+[submodule "deps/json"]
+	path = deps/json
+	url = https://github.com/nlohmann/json

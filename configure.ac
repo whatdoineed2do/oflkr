@@ -16,14 +16,20 @@ PKG_PROG_PKG_CONFIG
 
 AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
+PKG_CHECK_MODULES(LIBCONFIG, [libconfig++ >= 1.5])
 PKG_CHECK_MODULES(IMAGEMAGICK, [Magick++ >= 6.9.9])
-PKG_CHECK_MODULES(EXIV,        [exiv2 >= 0.25])
+PKG_CHECK_MODULES(EXIV, [exiv2 >= 0.25])
+PKG_CHECK_MODULES(SQLITE3, [sqlite3 >= 3.22.0])
+PKG_CHECK_MODULES(LOG4CPP, [log4cpp >= 1.1.1])
 
-AC_CHECK_HEADERS([restbed], [found_hdrs=yes], [AC_MSG_ERROR([[Missing required header: <restbed>]])])
-AC_CHECK_LIB(restbed)
+AC_LANG_PUSH([C++])
 
-AC_SEARCH_LIBS([_ZN7restbed7ServiceC1Ev], [restbed], [],
+AC_CHECK_HEADERS([restbed], [], [AC_MSG_ERROR([[Missing required header: <restbed>]])])
+AC_SEARCH_LIBS([_ZN7restbed7ServiceC1Ev], [restbed],
+        [AC_DEFINE([HAVE_RESTBED], [1]) RESTBED_LIBS="-lrestbed"],
         [AC_MSG_ERROR([[Missing restbed library is required]])])
+
+AC_CHECK_HEADERS([nlohmann/json.hpp], [], [AC_MSG_ERROR([[Missing required header: nlohmann/json.hpp]])])
 
 
 AC_ARG_ENABLE([debug-code],
