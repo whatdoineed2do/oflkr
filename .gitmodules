@@ -1,0 +1,6 @@
+[submodule "deps/log4cpp"]
+	path = deps/log4cpp
+	url = https://github.com/orocos-toolchain/log4cpp
+[submodule "deps/restbed"]
+	path = deps/restbed
+	url = https://github.com/Corvusoft/restbed

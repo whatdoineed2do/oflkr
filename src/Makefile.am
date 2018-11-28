@@ -1,0 +1,15 @@
+ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
+
+AM_CXXFLAGS = $(IMAGEMAGICK_CFLAGS) $(EXIV_CFLAGS) $(RESTBED_CFLAGS) -Wno-conversion-null -Wno-deprecated
+AM_LDFLAGS  = $(IMAGEMAGICK_LIBS) $(EXIV_LIBS) $(RESTBED_LIBS)
+
+bin_PROGRAMS = oflkr
+
+oflkr_CPPFLAGS =
+oflkr_CXXFLAGS = $(AM_CXXFLAGS)
+#oflkr_LDFLAGS = 
+#oflkr_LDADD =
+oflkr_SOURCES = \
+	RESTsvr.cc \
+	oflkr.cc
+
