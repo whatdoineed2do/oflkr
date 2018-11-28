@@ -7,14 +7,11 @@
 #include <iomanip>
 #include <functional>
 
-#include <iostream>  // TODO remove
-
-
-//void set_method_handler( const std::string& method, 
-    //const std::function< void ( const std::shared_ptr< Session > ) >& callback );
 
 RESTsvr::RESTsvr()
+    : _log(log4cpp::Category::getInstance("RESTsvr"))
 {
+
     const std::string  GET = "GET";
     const std::string  PUT = "PUT";
 
@@ -39,11 +36,11 @@ RESTsvr::RESTsvr()
     _svc.set_signal_handler(SIGHUP,  std::bind(RESTsvr::_sighdlr, std::ref(*this), std::placeholders::_1) );
 #endif
 
-    _svc.set_error_handler([](const int i_, const std::exception& e_, const std::shared_ptr<restbed::Session> s_) {
-        std::cout << "error handler: " << i_ << " - " << e_.what() << '\n';
+    _svc.set_error_handler([this](const int i_, const std::exception& e_, const std::shared_ptr<restbed::Session> s_) {
+        LOG_ERROR(_log) << "error handler: " << i_ << " - " << e_.what();
     });
 
-    _svc.set_not_found_handler([](const std::shared_ptr<restbed::Session> s_)
+    _svc.set_not_found_handler([this](const std::shared_ptr<restbed::Session> s_)
     {
         const auto&  req = s_->get_request();
 
@@ -51,32 +48,32 @@ RESTsvr::RESTsvr()
         dump << "BAD_REQUEST endpoint not found - " << req->get_method() << ' ' << req->get_path() << '\n';
         const std::string  err = std::move(dump.str());
 
-        std::cout << err;
+        LOG_WARN(_log) << err;
         s_->close(restbed::BAD_REQUEST, err, {{ "Content-Length", std::to_string(err.length()) }} );
     });
 }
 
 void  RESTsvr::start() noexcept
 {
-    std::cout << "staring svc " << std::hex << this << "\n";
+    LOG_INFO(_log) << "staring svc " << std::hex << this;
     _svc.start(_settings);
 }
 
 void  RESTsvr::stop()  noexcept
 {
     _svc.stop();
-    std::cout << "stopped svc\n";
+    LOG_INFO(_log) << "stopping svc " << std::hex << this;
 }
 
 void  RESTsvr::_sighdlr(RESTsvr& svr_, const int sig_)
 {
-    std::cout << "recv'd signal (" << sig_ << ") stopping " << std::hex << &svr_ << " ,,,\n";
+    LOG_INFO(svr_._log) << "recv'd signal (" << sig_ << ") stopping " << std::hex << &svr_;
     svr_.stop();
 }
 
 void  RESTsvr::_geStream(RESTsvr& svr_, const std::shared_ptr<restbed::Session> s_)
 {
-    std::cout << "endpoint: stream\n";
+    LOG_DEBUG(svr_._log) << "endpoint: stream";
     const auto&  req = s_->get_request();
 
     std::ostringstream  s;

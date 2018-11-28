@@ -1,14 +1,14 @@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
 
-AM_CXXFLAGS = $(IMAGEMAGICK_CFLAGS) $(EXIV_CFLAGS) $(RESTBED_CFLAGS) -Wno-conversion-null -Wno-deprecated
-AM_LDFLAGS  = $(IMAGEMAGICK_LIBS) $(EXIV_LIBS) $(RESTBED_LIBS)
+AM_CXXFLAGS = $(IMAGEMAGICK_CFLAGS) $(EXIV_CFLAGS) $(RESTBED_CFLAGS) $(LOG4CPP_CFLAGS) -Wno-conversion-null -Wno-deprecated
+AM_LDFLAGS  = $(IMAGEMAGICK_LIBS) $(EXIV_LIBS) $(RESTBED_LIBS) $(LOG4CPP_LIBS)
 
 bin_PROGRAMS = oflkr
 
 oflkr_CPPFLAGS =
 oflkr_CXXFLAGS = $(AM_CXXFLAGS)
-#oflkr_LDFLAGS = 
-#oflkr_LDADD =
+oflkr_LDFLAGS = -Wl,-rpath=/usr/local/lib64 $(AM_LDFLAGS)
+oflkr_LDADD =
 oflkr_SOURCES = \
 	RESTsvr.cc \
 	oflkr.cc

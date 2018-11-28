@@ -5,6 +5,7 @@
 #include <list>
 
 #include <restbed>
+#include "Logger.h"
 
 
 class RESTsvr
@@ -23,6 +24,8 @@ class RESTsvr
     restbed::Service  _svc;
     std::shared_ptr<restbed::Settings>  _settings;
     std::list<std::shared_ptr<restbed::Resource>>  _resources;
+
+    log4cpp::Category&  _log;
 
     static void  _sighdlr(RESTsvr&, const int);
 
