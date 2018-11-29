@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::exception& ex)
     {
-        LOG_ERROR(log) << "caught - " << ex.what();
+        LOG_ERROR(log) << "failed to start REST svc - " << ex.what();
     }
     LOG_NOTICE(log) << "server stopped";
     return 0;

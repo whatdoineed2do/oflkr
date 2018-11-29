@@ -12,14 +12,14 @@
 class RESTsvr
 {
   public:
-    RESTsvr(const int port_, const int workers_);
+    RESTsvr(const int port_, const int workers_) noexcept;
 
     RESTsvr(const RESTsvr&) = delete;
     RESTsvr& operator=(const RESTsvr&) = delete;
 
 
-    void  start() noexcept;
-    void  stop()  noexcept;
+    void  start();
+    void  stop();
 
   private:
     restbed::Service  _svc;
@@ -35,17 +35,17 @@ class RESTsvr
     static void _geStream       (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _geStreamRecent (RESTsvr&, const std::shared_ptr<restbed::Session>);
 
-    static void _geAblums       (RESTsvr&, const std::shared_ptr<restbed::Session>);
-    static void _geAblum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _geAlbums       (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _geAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _geMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _geMediaMeta    (RESTsvr&, const std::shared_ptr<restbed::Session>);
 
     //   PUT
-    static void _peAblum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _peAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _peMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
 
     //   PUT
-    static void _deAblum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _deAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _deMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
 };
 
