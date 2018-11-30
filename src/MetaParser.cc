@@ -28,11 +28,8 @@ const Img  MetaParser::_parse(const char* filename_, const struct stat& st_, con
 	std::string*       target;
     } eatags[] = {
 	{ "  ISO speed",            Exiv2::isoSpeed,     &data.metaimg.iso      },
-	{ "  Exposure mode",        Exiv2::exposureMode, &data.metaimg.prog     },
-	//{ "  Image quality",        Exiv2::imageQuality, NULL         },
 	{ "  White balance",        Exiv2::whiteBalance, &data.metaimg.wb       },
 	{ "  Lens name",            Exiv2::lensName,     &data.metaimg.lens     },
-	//{ "  Metering mode",        Exiv2::meteringMode, NULL         },
 	{ "  Camera make",          Exiv2::make,         &mftr          },
 	{ "  Camera model",         Exiv2::model,        &data.metaimg.camera   },   // KEY2
 	{ "  Exposure time",        Exiv2::exposureTime, &data.metaimg.shutter  },
@@ -50,11 +47,6 @@ const Img  MetaParser::_parse(const char* filename_, const struct stat& st_, con
 	float*       tgtfloat;
     } misctags[] = {
 	{ "  Date Image (mod)",  "Exif.Image.DateTime", &data.moddate, NULL, NULL },           // mod time
-#if 0
-	{ "  SubSec",            "Exif.Photo.SubSecTime", NULL, NULL, NULL },
-	{ "  Date Image Orig",   "Exif.Image.DateTimeOriginal", NULL, NULL, NULL },   // not in CNX2 export'd jpgs
-#endif
-
 	{ "  Date Orig",         "Exif.Photo.DateTimeOriginal",   &dtorg, NULL, NULL },   // KEY3
 	{ "  SubSec Orig",       "Exif.Photo.SubSecTimeOriginal", &dtorgsub, NULL, NULL }, // KEY4
 

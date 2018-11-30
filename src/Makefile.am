@@ -10,8 +10,8 @@ oflkr_CXXFLAGS = $(AM_CXXFLAGS)
 oflkr_LDFLAGS = -Wl,-rpath=/usr/local/lib64 $(AM_LDFLAGS)
 oflkr_LDADD =
 oflkr_SOURCES = \
-	RESTsvr.cc \
 	Document.cc \
 	DataLayer.cc \
+	RESTsvr.cc \
 	oflkr.cc
 

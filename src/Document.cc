@@ -7,22 +7,22 @@
 Document::JSON  Document::json() const
 {
     JSON  json = { 
-        { "id", id }, 
+        { "id", key.id }, 
         {
             "ingest", {
-                { "id", ingest.id },
-                { "date", ingest.dt }
+                { "id", key.ingest.id },
+                { "date", key.ingest.dt }
             }
         },
-        { "vpath", vpath },
-        { "name", title },
-        { "type", type },
+        { "vpath", obj.vpath },
+        { "name", obj.title },
+        { "type", obj.type },
 
         {
             "media", {
-                { "size", size },
-                { "mime_type", mimetype },
-                { "dimensions", xy }
+                { "size", obj.size },
+                { "mime_type", obj.mimetype },
+                { "dimensions", obj.xy }
             }
         }
     };

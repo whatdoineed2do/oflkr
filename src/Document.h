@@ -14,50 +14,76 @@ class Document
 
     enum Type { UNKNOWN, IMAGE, VIDEO };
 
-    Document(const char* vpath_, const size_t sz_) : vpath(vpath_), size(sz_), type(Document::UNKNOWN), meta(nullptr)
-    { _title(); }
+    struct Key
+    {
+        const uint64_t  id;
+        struct Ingest {
+            uint64_t  id;
+            uint64_t  dt;
 
-    Document(const Document&&  rhs_)
-	: vpath(std::move(rhs_.vpath)), title(std::move(rhs_.title)), type(rhs_.type), mimetype(std::move(rhs_.mimetype)), size(rhs_.size), uri(std::move(rhs_.uri)), 
-	  xy(std::move(rhs_.xy)), moddate(std::move(rhs_.moddate)), rating(std::move(rhs_.rating)),
-	  meta(std::move(rhs_.meta))
-    { }
+            Ingest() : id(0), dt(0) { }
+            Ingest(const uint64_t id_, const uint64_t dt_) : id(id_), dt(dt_)
+            { }
+        };
+        const Ingest  ingest;
+        const uint64_t  dttaken;
 
-    Document(const Document&  rhs_) = delete;
-    void operator=(const Document&)  = delete;
-    void operator=(const Document&&) = delete;
+        Key() : id(-1), dttaken(0) { }
 
+        Key(uint64_t id_, const Ingest& ingest_, uint64_t dttaken_)
+            : id(id_), ingest(ingest_), dttaken(dttaken_)
+        { }
 
+        Key(const Key& rhs_)
+            : id(rhs_.id), ingest(rhs_.ingest), dttaken(rhs_.dttaken)
+        { }
+    };
 
-    uint64_t  id;
-    struct {
-        uint64_t  id;
-        uint64_t  dt;
-    } ingest;
-    uint64_t  dttaken;
+    struct Object
+    {
+        const std::string  vpath;
+        const std::string  title;
 
-    std::string  vpath;
-    std::string  title;
+        const Document::Type  type;
+        const std::string  mimetype;
+        const size_t  size;
 
-    Document::Type  type;
-    std::string  mimetype;
-    size_t  size;
-    std::string  uri;
+        const std::string  xy;        // dimensions
 
-    std::string  xy;        // dimensions
+        const std::string  moddate;  // may be empty or reset to empty
+        const std::string  rating;
 
-    std::string  moddate;  // may be empty or reset to empty
-    std::string  rating;
+        Object( const std::string&  vpath_,
+                const std::string&  title_,
+
+                const Document::Type  type_,
+                const std::string&  mimetype_,
+                const size_t  size_,
+
+                const std::string&  xy_,
+
+                const std::string&  moddate_,
+                const std::string&  rating_)
+            : 
+                vpath(vpath_), title(title_), type(type_), mimetype(mimetype_), size(size_),
+                xy(xy_), moddate(moddate_), rating(rating_)
+        { }
+
+        Object(const Object& rhs_) = delete;
+
+        Object(const Object&& rhs_) :
+                vpath(std::move(rhs_.vpath)), title(std::move(rhs_.title)), type(std::move(rhs_.type)), mimetype(std::move(rhs_.mimetype)), size(std::move(rhs_.size)),
+                xy(std::move(rhs_.xy)), moddate(std::move(rhs_.moddate)), rating(std::move(rhs_.rating))
+        { }
+    };
 
     JSON  json() const;
 
     struct Meta
     {
-        const Document&  document;
-
-        Meta(const Document& d_) : document(d_) { }
-        Meta(const Meta&  rhs_) : document(rhs_.document) { }
-        Meta(const Meta&& rhs_) : document(rhs_.document) { }
+        Meta() = default;
+        Meta(const Meta&) = default;
+        Meta(Meta&&) = default;
 
         Meta& operator=(const Meta&)  = delete;
         Meta& operator=(const Meta&&) = delete;
@@ -69,8 +95,6 @@ class Document
 
     struct MetaImg : public Meta
     {
-        MetaImg(const Document& d_) : Meta(d_), rotate(0) { }
-
 	MetaImg(const MetaImg& rhs_) :
             Meta(rhs_),
 	    dpi(rhs_.dpi),
@@ -124,7 +148,7 @@ class Document
 
     struct MetaVid : public Meta 
     {
-	MetaVid(const Document& d_) : Meta(d_), duration(0), framerate(0) { }
+	MetaVid() : duration(0), framerate(0) { }
 
 	MetaVid(const MetaVid& rhs_) :
             Meta(rhs_), 
@@ -153,10 +177,29 @@ class Document
             return JSON();
         }
     };
-    Document::Meta*  meta;
 
+    Document(const Document::Object&& obj_, const std::shared_ptr<Document::Meta>& meta_)
+        : obj(std::move(obj_)), meta(meta_) 
+    { }
+
+    Document(const Document::Key&& key_, const Document::Object&& obj_, const std::shared_ptr<Document::Meta>& meta_)
+        : key(std::move(key_)), obj(std::move(obj_)), meta(meta_) 
+    { }
+
+
+    Document(const Document&  rhs_) = delete;
+    Document(const Document&& rhs_) : key(std::move(rhs_.key)), obj(std::move(rhs_.obj)), meta(std::move(rhs_.meta)) { }
+
+    void operator=(const Document&)  = delete;
+    void operator=(const Document&&) = delete;
+
+
+    const Document::Key     key;
+    const Document::Object  obj;
+    const std::shared_ptr<Document::Meta>  meta;
 
   private:
+#if 0
     void  _title()
     {
 	std::string::size_type  p;
@@ -164,6 +207,7 @@ class Document
 	            vpath :
 		    vpath.substr(p+1);
     }
+#endif
 };
 
 #endif
