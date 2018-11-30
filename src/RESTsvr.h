@@ -8,6 +8,8 @@
 #include <restbed>
 #include "Logger.h"
 
+class DataLayer;
+
 
 class RESTsvr
 {
@@ -28,8 +30,6 @@ class RESTsvr
 
     log4cpp::Category&  _log;
 
-    static void  _sighdlr(RESTsvr&, const int);
-
     // endpoints
     //   GET
     static void _geStream       (RESTsvr&, const std::shared_ptr<restbed::Session>);
@@ -37,16 +37,18 @@ class RESTsvr
 
     static void _geAlbums       (RESTsvr&, const std::shared_ptr<restbed::Session>);
     static void _geAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
-    static void _geMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
-    static void _geMediaMeta    (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _geDocument     (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _geDocumentMeta (RESTsvr&, const std::shared_ptr<restbed::Session>);
 
     //   PUT
     static void _peAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
-    static void _peMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _peDocument     (RESTsvr&, const std::shared_ptr<restbed::Session>);
 
     //   PUT
     static void _deAlbum        (RESTsvr&, const std::shared_ptr<restbed::Session>);
-    static void _deMedia        (RESTsvr&, const std::shared_ptr<restbed::Session>);
+    static void _deDocument     (RESTsvr&, const std::shared_ptr<restbed::Session>);
+
+    std::shared_ptr<DataLayer>  _dal;
 };
 
 #endif
