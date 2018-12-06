@@ -1,7 +1,5 @@
 #include "MetaParser.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
 #include <strings.h>
@@ -11,7 +9,13 @@
 #include <exiv2/exiv2.hpp>
 
 
-const Img  MetaParser::_parse(const char* filename_, const struct stat& st_, const char* thumbpath_) const
+const Document::Meta*  MetaParser::parse(const char* filename_)
+    throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error)
+{
+    return parse();
+}
+
+const Document::Meta*  MetaParser::parse(const void* data_, size_t dsz_)
     throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error)
 {
     typedef Exiv2::ExifData::const_iterator (*EasyAccessFct)(const Exiv2::ExifData& ed);
