@@ -6,6 +6,7 @@
 
 #include <nlohmann/json.hpp>
 
+namespace oflkr {
 
 class Document
 {
@@ -95,6 +96,8 @@ class Document
 
     struct MetaImg : public Meta
     {
+	MetaImg() = default;
+
 	MetaImg(const MetaImg& rhs_) :
             Meta(rhs_),
 	    dpi(rhs_.dpi),
@@ -148,7 +151,7 @@ class Document
 
     struct MetaVid : public Meta 
     {
-	MetaVid() : duration(0), framerate(0) { }
+	MetaVid() = default;
 
 	MetaVid(const MetaVid& rhs_) :
             Meta(rhs_), 
@@ -169,13 +172,16 @@ class Document
 
 	std::string  container;
 	std::string  model;
-	time_t  duration;
-	float   framerate;
+        std::string  duration;
+        std::string  framerate;
+        std::string  codec;
 
-        JSON  _meta() const override
-        {
-            return JSON();
-        }
+        std::string  audioType;
+        std::string  audioChannels;
+        std::string  audioBitsPerSample;
+        std::string  audioSamplerate;
+
+        JSON  _meta() const override;
     };
 
     Document(const Document::Object&& obj_, const std::shared_ptr<Document::Meta>& meta_)
@@ -209,5 +215,7 @@ class Document
     }
 #endif
 };
+
+}
 
 #endif

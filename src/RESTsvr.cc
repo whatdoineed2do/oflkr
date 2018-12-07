@@ -13,7 +13,9 @@
 #include "DataLayer.h"
 #include "Document.h"
 
+using namespace oflkr;
 
+namespace oflkr {
     const std::string  GET = "GET";
     const std::string  PUT = "PUT";
     const std::string  POST = "POST";
@@ -182,4 +184,4 @@ void  RESTsvr::_peDocument        (RESTsvr& svr_, const std::shared_ptr<restbed:
 
 void  RESTsvr::_deAlbum        (RESTsvr& svr_, const std::shared_ptr<restbed::Session> s_) { }
 void  RESTsvr::_deDocument        (RESTsvr& svr_, const std::shared_ptr<restbed::Session> s_) { }
-
+}

@@ -3,13 +3,29 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <memory>
+#include <list>
 
+#include "Logger.h"
 #include "Document.h"
+
+
+namespace Exiv2 {
+    class Image;
+}
+
+namespace oflkr
+{
+struct DocumentIdentifier;
+struct _Parser;
+
 
 class MetaParser
 {
   public:
-    MetaParser() = default;
+    using _Parsers = std::list<oflkr::DocumentIdentifier>;
+
+    MetaParser();
     ~MetaParser() = default;
 
     MetaParser(const MetaParser&) = delete;
@@ -22,19 +38,18 @@ class MetaParser
     Document::Meta*  parse(const void* data_, size_t dsz_)
         throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error);
 
-  private:
-    struct _Parser {
-        _Parser() = default;
-        virutal ~_Parser() = default;
+  protected:
+    oflkr::Logger&  _log;
 
-        virtual Document::Meta*  parse() = 0;
-    };
-    struct _ImgParser : public _Parser {
-        Document::Meta*  parse() override;
-    };
-    struct _VidParser : public _Parser {
-        Document::Meta*  parse() override;
-    };
+  private:
+    MetaParser::_Parsers  _parsers;
 };
+
+
+struct DocumentIdentifier {
+    std::shared_ptr<oflkr::_Parser>  p;
+    std::function<bool (const Exiv2::Image&)>  handles;
+};
+}
 
 #endif

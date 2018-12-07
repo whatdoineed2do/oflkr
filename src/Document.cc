@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 
+namespace oflkr {
 
 Document::JSON  Document::json() const
 {
@@ -34,8 +35,40 @@ Document::JSON  Document::json() const
 Document::JSON  Document::MetaImg::_meta() const
 {
     JSON  json = {
-        { "camera", camera },
-        { "camera_sn", sn }
+        {
+        "image", {
+            { "camera", camera },
+            { "camera_sn", sn },
+            { "shutter_count", shuttercnt},
+            { "lens", lens },
+            { "focal_length", focallen },
+            { 
+                "exposure", {
+                    { "shutter", shutter },
+                    { "aperture", aperture },
+                    { "iso", iso }
+                }
+            }
+        }
+        }
     };
     return json;
+}
+
+Document::JSON  Document::MetaVid::_meta() const
+{
+    JSON  json = {
+        {
+        "video", {
+            { "model", model },
+            { "codec", codec },
+            { "container", container },
+            { "duration", duration },
+            { "framerate", framerate }
+        }
+        }
+    };
+    return json;
+}
+
 }

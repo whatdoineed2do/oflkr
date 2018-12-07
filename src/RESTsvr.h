@@ -8,6 +8,8 @@
 #include <restbed>
 #include "Logger.h"
 
+namespace oflkr {
+
 class DataLayer;
 
 
@@ -50,5 +52,7 @@ class RESTsvr
 
     std::shared_ptr<DataLayer>  _dal;
 };
+
+}
 
 #endif

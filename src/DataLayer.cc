@@ -2,6 +2,8 @@
 
 #include "Document.h"
 
+namespace oflkr {
+
 FileDataLayer::FileDataLayer()
 {
 }
@@ -26,4 +28,6 @@ Document::JSON  FileDataLayer::mediaCr(const Document::JSON&)  { return Document
 Document::JSON  FileDataLayer::mediaRpl(uint64_t)  { return Document::JSON(); }
 Document::JSON  FileDataLayer::mediaUpd(uint64_t) { return Document::JSON(); }
 Document::JSON  FileDataLayer::mediaDel(uint64_t) { return Document::JSON(); }
+
+}
 

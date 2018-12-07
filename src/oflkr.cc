@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
                 throw std::invalid_argument("incomplete REST svr cfg");
             }
 
-            RESTsvr  svr(port, workers);
+            oflkr::RESTsvr  svr(port, workers);
             svr.start();
         }
         catch (const std::exception& ex)

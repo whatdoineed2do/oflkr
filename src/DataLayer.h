@@ -5,6 +5,10 @@
 
 #include "Document.h"
 
+namespace oflkr {
+
+using oflkr::Document;
+
 class DataLayer
 {
   public:
@@ -52,5 +56,7 @@ class FileDataLayer : public DataLayer
     Document::JSON  mediaUpd(uint64_t) ;
     Document::JSON  mediaDel(uint64_t) ;
 };
+
+}
 
 #endif
