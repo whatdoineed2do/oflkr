@@ -43,12 +43,28 @@ inline oflkr::Logger&  LOG_ROOT(const std::string& where_ = "")
         std::cerr << "failed to configure logger via " << where_ << ", using stdout\n";
     }
 
-    if (console) {
+    if (console)
+    {
         log4cpp::Appender*  a = new log4cpp::OstreamAppender("console", &std::cout);
         log4cpp::PatternLayout*  l = new log4cpp::PatternLayout();
-        l->setConversionPattern("%m%n");
+        const char*  e;
+
+        const char*  dftlpattern = "%m%n";
+        const char*  pattern = (e = getenv("OFLKR_LOG_PATTERN")) ? e : dftlpattern;
+        try {
+            l->setConversionPattern(pattern);
+        }
+        catch (...) {
+            l->setConversionPattern(dftlpattern);
+        }
         a->setLayout(l);
-        log.setPriority(log4cpp::Priority::NOTICE);
+
+        log4cpp::Priority::Value  p = log4cpp::Priority::NOTICE;
+        if ( (e = getenv("OFLKR_LOG_LEVEL"))) {
+            p = (p = log4cpp::Priority::getPriorityValue(e)) == log4cpp::Priority::NOTSET ?
+                    log4cpp::Priority::NOTICE : p;
+        }
+        log.setPriority(p);
         log.addAppender(a);
     }
     return log;
