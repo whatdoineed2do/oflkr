@@ -24,7 +24,7 @@
 
 
 RESTsvr::RESTsvr(const int port_, const int workers_)  noexcept
-    : _log(log4cpp::Category::getInstance("RESTsvr"))
+    : _log(LOG_INSTANCE("RESTsvr"))
 {
     LOG_DEBUG(_log) << "port=" << port_ << " workers=" << workers_;
 

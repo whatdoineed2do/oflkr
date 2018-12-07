@@ -1,8 +1,13 @@
 #ifndef OFLKR_LOGGER_H
-#define OKFLR_LOGGER_H
+#define OFLKR_LOGGER_H
+
+#include <string>
 
 #include <log4cpp/Priority.hh>
 #include <log4cpp/Category.hh>
+
+#include <log4cpp/Category.hh>
+#include <log4cpp/PropertyConfigurator.hh>
 
 
 #define LOG_EMERG(__log4cpp_log_wrapper) __log4cpp_log_wrapper << log4cpp::Priority::EMERG
@@ -13,5 +18,18 @@
 #define LOG_NOTICE(__log4cpp_log_wrapper) __log4cpp_log_wrapper << log4cpp::Priority::NOTICE
 #define LOG_INFO(__log4cpp_log_wrapper) __log4cpp_log_wrapper << log4cpp::Priority::INFO
 #define LOG_DEBUG(__log4cpp_log_wrapper) __log4cpp_log_wrapper << log4cpp::Priority::DEBUG
+
+namespace oflkr {
+    using Logger = log4cpp::Category;
+}
+
+inline oflkr::Logger&  LOG_ROOT(const std::string& where_)
+{
+    log4cpp::Category&  log = log4cpp::Category::getRoot();
+    log4cpp::PropertyConfigurator::configure(where_);
+    return log;
+}
+
+#define LOG_INSTANCE(__log4cpp_log_instance_) log4cpp::Category::getInstance(__log4cpp_log_instance_)
 
 #endif

@@ -28,7 +28,7 @@ class RESTsvr
     std::shared_ptr<restbed::Settings>  _settings;
     std::list<std::shared_ptr<restbed::Resource>>  _resources;
 
-    log4cpp::Category&  _log;
+    oflkr::Logger&  _log;
 
     // endpoints
     //   GET
