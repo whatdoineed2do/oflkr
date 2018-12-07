@@ -22,9 +22,12 @@ int main(int argc, char* argv[])
                 continue;
             }
 
-            LOG_NOTICE(log) << f;
-            LOG_NOTICE(log) << m->_meta();
-            delete m;
+            LOG_DEBUG(log) << f;
+            LOG_INFO(log) << m->_meta();
+
+            oflkr::Document  doc(oflkr::Document::Object(f, f, oflkr::Document::UNKNOWN, "mime/???", 123456, "h x w", "Jan 1 1970 midnight", "3/5"), std::shared_ptr<oflkr::Document::Meta>(m));
+
+            LOG_NOTICE(log) << doc.json();
         }
     }
     catch (const std::exception& ex)
