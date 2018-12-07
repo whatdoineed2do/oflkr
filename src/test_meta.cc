@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        oflkr::Logger&  log = LOG_ROOT("log4cpp.properties");
+        oflkr::Logger&  log = LOG_ROOT();
 
         char**  fp = argv+1;
         while (*fp)

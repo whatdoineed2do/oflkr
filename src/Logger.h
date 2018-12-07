@@ -2,12 +2,15 @@
 #define OFLKR_LOGGER_H
 
 #include <string>
+#include <iostream>
 
 #include <log4cpp/Priority.hh>
 #include <log4cpp/Category.hh>
-
-#include <log4cpp/Category.hh>
 #include <log4cpp/PropertyConfigurator.hh>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/Layout.hh>
+#include <log4cpp/PatternLayout.hh>
+
 
 
 #define LOG_EMERG(__log4cpp_log_wrapper) __log4cpp_log_wrapper << log4cpp::Priority::EMERG
@@ -23,10 +26,31 @@ namespace oflkr {
     using Logger = log4cpp::Category;
 }
 
-inline oflkr::Logger&  LOG_ROOT(const std::string& where_)
+inline oflkr::Logger&  LOG_ROOT(const std::string& where_ = "")
 {
     log4cpp::Category&  log = log4cpp::Category::getRoot();
-    log4cpp::PropertyConfigurator::configure(where_);
+    bool  console = true;
+    try
+    {
+        if (where_.size() > 0) {
+            console = false;
+            log4cpp::PropertyConfigurator::configure(where_);
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        console = true;
+        std::cerr << "failed to configure logger via " << where_ << ", using stdout\n";
+    }
+
+    if (console) {
+        log4cpp::Appender*  a = new log4cpp::OstreamAppender("console", &std::cout);
+        log4cpp::PatternLayout*  l = new log4cpp::PatternLayout();
+        l->setConversionPattern("%m%n");
+        a->setLayout(l);
+        log.setPriority(log4cpp::Priority::NOTICE);
+        log.addAppender(a);
+    }
     return log;
 }
 
