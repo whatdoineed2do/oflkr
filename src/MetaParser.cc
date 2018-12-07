@@ -47,28 +47,57 @@ MetaParser::MetaParser()
     };
 }
 
-Document::Meta*  MetaParser::parse(const char* filename_)
+Document::Meta*  MetaParser::_parse(Exiv2::Image&  img_) const
     throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error)
 {
     Document::Meta*  m = nullptr;
     try
     {
-        Exiv2::Image::AutoPtr  imgp = Exiv2::ImageFactory::open(filename_);
-        imgp->readMetadata();
-        const Exiv2::Image&  img = *imgp.get();
+        img_.readMetadata();
 
         for (const auto& p : _parsers) {
-            if (p.handles(img)) {
-                m = p.p->parse(img);
+            if (p.handles(img_)) {
+                m = p.p->parse(img_);
                 break;
             }
         }
     }
     catch (const std::exception& ex)
     {
-        LOG_ERROR(_log) << "failed to parse image - " << ex.what();
+        LOG_ERROR(_log) << "failed to handle image - " << ex.what();
+        throw std::invalid_argument("failed to handle image");
     }
     return m;
+}
+
+Document::Meta*  MetaParser::parse(const char* filename_) const
+    throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error)
+{
+    try
+    {
+        Exiv2::Image::AutoPtr  imgp = Exiv2::ImageFactory::open(filename_);
+        return _parse(*imgp.get());
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERROR(_log) << "failed to parse image - " << filename_;
+        throw std::invalid_argument("failed to parse image");
+    }
+}
+
+Document::Meta*  MetaParser::parse(const char* data_, size_t dsz_) const
+    throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error)
+{
+    try
+    {
+        Exiv2::Image::AutoPtr  imgp = Exiv2::ImageFactory::open(data_, dsz_);
+        return _parse(*imgp.get());
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERROR(_log) << "failed to parse image buffer=" << std::hex << data_ << "sz=" << dsz_;
+        throw std::invalid_argument("failed to parse image");
+    }
 }
 
 

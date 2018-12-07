@@ -32,10 +32,10 @@ class MetaParser
     MetaParser& operator=(const MetaParser&) = delete;
 
 
-    Document::Meta*  parse(const char* filename_)
+    Document::Meta*  parse(const char* filename_) const
         throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error);
 
-    Document::Meta*  parse(const void* data_, size_t dsz_)
+    Document::Meta*  parse(const char* data_, size_t dsz_) const
         throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error);
 
   protected:
@@ -43,6 +43,9 @@ class MetaParser
 
   private:
     MetaParser::_Parsers  _parsers;
+
+    Document::Meta*  _parse(Exiv2::Image&) const
+        throw (std::invalid_argument, std::range_error, std::underflow_error, std::overflow_error);
 };
 
 
